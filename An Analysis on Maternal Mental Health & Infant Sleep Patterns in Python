@@ -1,0 +1,131 @@
+#I wanted to rename the columns for clarity. I created a new data frame named ‘data’ and renamed columns as follows in the below code:
+# import pandas
+import pandas as pd
+
+
+# read practice cvs in df
+df = pd.read_csv('/Users/thandiharris/Desktop/project data/Maternal_mental_infant_sleep(codingfileA2).csv',
+                usecols=[4, 9, 12, 34, 43, 50, 51, 61])
+#renaming columns
+data = df.rename(columns={'Age':'MomsAge', 'Gestationnal_age':'WeeksPregnant', 'CBTS_M_3':'CBTS3months', 'EPDS_3':'EPDS3months', 'HADS_3':'HADS3months', 'Age_bb':'BabyAge', 'IBQ_R_VSF_3_bb1':'infantBehaviorQuest3months', 'Sleep_night_duration_bb1':'BabySleep_duration'})
+Summary10=data
+Summary10.to_clipboard()
+
+#In the table recreated, there is missing ‘data’ in column 61 now named ‘BabySleep_duration’. The na values were removed using the method dropna().
+# import pandas
+import pandas as pd
+
+
+# read practice cvs in df, showing na values
+df = pd.read_csv('/Users/thandiharris/Desktop/project data/Maternal_mental_infant_sleep(codingfileA2).csv', usecols=[4, 9, 12, 34, 43, 50, 51, 61],
+                na_values=['-','?','na','NAT','none'])
+
+
+#rename columns, using dropna() droping na values
+data = df.rename(columns={'Age':'MomsAge', 'Gestationnal_age':'WeeksPregnant', 'CBTS_M_3':'CBTS3months', 'EPDS_3':'EPDS3months', 'HADS_3':'HADS3months', 'Age_bb':'BabyAge', 'IBQ_R_VSF_3_bb1':'infantBehaviorQuest3months', 'Sleep_night_duration_bb1':'BabySleep_duration'})
+Summary12=data.dropna()
+Summary12.to_clipboard()
+
+#I decided to redo head(20) method with my renamed columns, source code below:
+# import pandas
+import pandas as pd
+
+
+# read practice cvs in df, with chosen columns
+df = pd.read_csv('/Users/thandiharris/Desktop/project data/Dataset_maternal_infantsleepprojectA.csv', usecols=[4, 9, 12, 34, 43, 50, 51, 61])
+
+
+
+
+#will rename columns again, head(20)
+data= df.rename(columns={'Age':'MomsAge', 'Gestationnal_age':'WeeksPregnant', 'CBTS_M_3':'CityBirthTraumaSurvey3months', 'EPDS_3':'DepressionSurvey3months', 'HADS_3':'Anxiety3months', 'Age_bb':'BabyAge', 'IBQ_R_VSF_3_bb1':'infantBehaviorSurvey3months', 'Sleep_night_duration_bb1':'BabySleep_duration'})
+summary21= data.head(20)
+summary21.to_clipboard()
+
+#Then I calculated the skewness for each renamed column, source column is below:
+# import pandas
+import pandas as pd,scipy.stats as sps
+
+
+# read practice cvs in df, with chosen columns
+df = pd.read_csv('/Users/thandiharris/Desktop/project data/Dataset_maternal_infantsleepprojectA.csv', usecols=[4, 9, 12, 34, 43, 50, 51, 61])
+
+
+
+
+#in renamed columns find skewness
+data= df.rename(columns={'Age':'MomsAge', 'Gestationnal_age':'WeeksPregnant', 'CBTS_M_3':'CityBirthTraumaSurvey3months', 'EPDS_3':'DepressionSurvey3months', 'HADS_3':'Anxiety3months', 'Age_bb':'BabyAge', 'IBQ_R_VSF_3_bb1':'infantBehaviorSurvey3months', 'Sleep_night_duration_bb1':'BabySleep_duration'})
+
+
+MomsAgeskewness= data['MomsAge']
+print(sps.skew(MomsAgeskewness))
+WeeksPregnantskewness= data['WeeksPregnant']
+print(sps.skew(WeeksPregnantskewness))
+CityBirthTraumaSurvey3monthsskewness= data['CityBirthTraumaSurvey3months']
+print(sps.skew(CityBirthTraumaSurvey3monthsskewness))
+DepressionSurvey3monthsskewness= data['DepressionSurvey3months']
+print(sps.skew(DepressionSurvey3monthsskewness))
+Anxiety3monthsskewness= data['Anxiety3months']
+print(sps.skew(Anxiety3monthsskewness))
+BabyAgeskewness= data['BabyAge']
+print(sps.skew(BabyAgeskewness))
+infantBehaviorSurvey3monthsskewness= data['infantBehaviorSurvey3months']
+print(sps.skew(infantBehaviorSurvey3monthsskewness))
+BabySleep_durationskewness= data['BabySleep_duration']
+print(sps.skew(BabySleep_durationskewness))
+
+ #The goal below was to look for the coefficient of determination to see if there is any relationship between the chosen columns. The cm2 was 0.02 between momsAge and ‘DepressionSurvey3months’ indicating there is little correlation between the two columns. Source code below for heatmap created:
+# import pandas, seaborn and matplotlib
+import pandas as pd, seaborn as sns, matplotlib.pyplot as plt
+
+
+# read cvs in df, with chosen columns, display na_values
+df = pd.read_csv('/Users/thandiharris/Desktop/project data/Dataset_maternal_infantsleepprojectA.csv', usecols=[4, 9, 12, 34, 43, 50, 51, 61],
+                na_values=['-', '?', 'na', 'none','NAT'])
+#drop na values in place
+df.dropna(axis=1, inplace=True)
+#rename columns in data
+data= df.rename(columns={'Age':'MomsAge', 'Gestationnal_age':'WeeksPregnant', 'CBTS_M_3':'CityBirthTraumaSurvey3months', 'EPDS_3':'DepressionSurvey3months', 'HADS_3':'Anxiety3months', 'Age_bb':'BabyAge', 'IBQ_R_VSF_3_bb1':'infantBehaviorSurvey3months', 'Sleep_night_duration_bb1':'BabySleep_duration'})
+#assign matrix to variable in data
+cm =data.corr()
+#create new matrix with squared variable
+cm2= cm**2
+#display heatmap
+sns.heatmap(cm2, vmin=0, vmax=1, annot=True, fmt='.2f', cmap='viridis')
+plt.show()
+
+#I decided to look further into the relationship between columns ‘DepressionSurvey3months’ & ‘MomsAge’ using a boxplot. The source code is below:
+#boxplot  showing relationship between MomsAge & DepressionSurvey3months in data
+#set color
+sns.set(color_codes=True)
+#set x= 'depressionsurvey3months', y='MomsAge'
+sns.boxplot(x='DepressionSurvey3months', y='MomsAge', data=data)
+#displayboxplot
+plt.show()
+
+#Since my scatter and residual plots did not work with this dataset, I decided to use a logistic regression model. The following is the source code created for the logistic regression model created within seaborn:
+# import pandas, seaborn and matplotlib
+import pandas as pd, seaborn as sns, matplotlib.pyplot as plt
+
+
+# read cvs in df, with chosen columns, display na_values
+df = pd.read_csv('/Users/thandiharris/Desktop/project data/Dataset_maternal_infantsleepprojectA.csv', usecols=[4, 9, 12, 34, 43, 50, 51, 61],
+                na_values=['-', '?', 'na', 'none','NAT'])
+
+
+#renaming columns in data
+data= df.rename(columns={'Age':'MomsAge', 'Gestationnal_age':'WeeksPregnant', 'CBTS_M_3':'CityBirthTraumaSurvey3months', 'EPDS_3':'DepressionSurvey3months', 'HADS_3':'Anxiety3months',
+                        'Age_bb':'BabyAge', 'IBQ_R_VSF_3_bb1':'infantBehaviorSurvey3months', 'Sleep_night_duration_bb1':'BabySleep_duration'})
+#remove na values in data
+data.dropna()
+#logistic regression using seaborn showing 'DepressionSurvey3months' & 'MomsAge'
+sns.set(color_codes=True)
+sns.regplot(x='MomsAge', y='DepressionSurvey3months', data=data, logistic=True)
+#display logistic regression model
+plt.show()
+
+
+
+
+
+
